@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上傳影片</title>
+</head>
+<body>
+    <div class="upload-container">
+        <h2>上傳影片</h2>
+        <div id="message-container">
+            {% if message %}
+                <p>{{ message }}</p>
+            {% endif %}
+        </div>
+
+        {% if video_url %}
+            <video controls autoplay>
+                <source src="{{ video_url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        {% endif %}
+        <form action="/submit_video/" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="id_video">搜尋影片:</label>
+            <input type="file" id="id_video" name="video_file" ><br><br>
+            <button type="submit">上傳</button>
+        </form>
+    </div>
+
+    <script>
+        var videoUrl = getParameterByName('video_url');
+        if (videoUrl) {
+            var video = document.createElement("video");
+            var source = document.createElement("source");
+            source.setAttribute("src", videoUrl);
+            video.appendChild(source);
+            video.setAttribute("controls", "true");
+            video.setAttribute("autoplay", "true");
+            document.querySelector(".upload-container").appendChild(video);
+        }
+
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+    </script>
+</body>
+</html>
+

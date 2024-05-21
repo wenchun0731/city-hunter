@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>主頁</title>
+    <style>
+        /* 垂直排列按钮 */
+        .button-container {
+            margin-top: 20px;
+        }
+        .button-container button {
+            display: block;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>主頁</h2>
+    <div class="button-container">
+        <a href="{% url 'login' %}"><button>使用者登入</button></a>
+        <a href="{% url 'upload_video' %}"><button>上傳影片</button></a>
+    </div>
+
+   
+</body>
+</html>
+
