@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查詢頁面</title>
+    <style>
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 20px;
+        }
+
+        th, td {
+          width: 25%; 
+          padding: 8px;
+          text-align: center;
+          border-bottom: 1px solid #ddd;
+        }
+
+        th {
+          background-color: #f2f2f2;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: space-around; 
+            margin-top: 20px;
+        }
+        .search-container input[type="text"],
+        .search-container button {
+            flex: 1; 
+            margin-right: 10px; 
+            max-width: 25%; 
+        }
+        h2 {
+            text-align: center; 
+        }
+        .home-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url 'home' %}" class="home-button"><button>返回主頁</button></a>
+    <h2>查詢结果</h2>
+    <div class="search-container">
+        <form action="{% url 'search' %}" method="get">
+            <input type="text" name="license_plate" placeholder="車牌">
+            <input type="text" name="date_time" placeholder="日期時間">
+            <input type="text" name="location" placeholder="地點">
+            <button type="submit">查詢</button>
+        </form>
+    </div>
+    <table>
+        <tr>
+            <th>車牌</th>
+            <th>日期時間</th>
+            <th>地點</th>
+            <th>違規</th>
+        </tr>
+        {% for result in search_results %}
+        <tr>
+            <td>{{ result.license_plate }}</td>
+            <td>{{ result.date_time }}</td>
+            <td>{{ result.location }}</td>
+            <td>{{ result.violation }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+
