@@ -1,14 +1,61 @@
-<div class="login-container">
-  <h2>使用者登入</h2>
-  <form action="/submit_login/" method="post">
-    {% csrf_token %}
-    <label htmlFor="email">email:</label>
-    <input type="text" id="email" name="email"  />
-    <p></p>
-    <label htmlFor="password">password:</label>
-    <input type="password" id="password" name="password"  />
-    <p></p>
-    <input type="submit" value="登入" />
-  </form>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用者登入頁面</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100%;
+            padding-top: 20px;
+            position: relative;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            width: 300px;
+            margin: 0 auto; /* This will center the form horizontally */
+            margin-bottom: 20px;
+            text-align: center; /* This will center-align the elements inside the form */
+        }
+
+        .home-link {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <a href="{% url 'home' %}" class="home-link"><button type="button">返回主頁</button></a>
+        <h2>使用者登入</h2>
+        <form action="/submit_login/" method="post">
+            {% csrf_token %}
+            <label htmlFor="email">email:</label>
+            <input type="text" id="email" name="email"  />
+            <p></p>
+            <label htmlFor="password">password:</label>
+            <input type="password" id="password" name="password"  />
+            <p></p>
+            <input type="submit" value="登入" />
+        </form>
+    </div>
+</body>
+</html>
 

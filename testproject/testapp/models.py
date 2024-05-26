@@ -9,19 +9,17 @@ class CustomUserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         if password:
-            user.password = password
+            user.set_password(password)  # Hash the password
         user.save(using=self._db)
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
-
         return self.create_user(email, password, **extra_fields)
 
 class User(AbstractBaseUser):
@@ -47,14 +45,25 @@ class Video(models.Model):
     video_file = models.FileField(upload_to='videos/') 
     
 class Car(models.Model):
-    car_id = models.AutoField(primary_key=True) 
+    id = models.AutoField(primary_key=True)
     license_plate = models.CharField(max_length=100)  
     date_time = models.DateTimeField()  
     location = models.CharField(max_length=255)  
-    violation = models.BooleanField(default=False) 
+    VIOLATION_CHOICES = [
+        (False, 'No'),
+        (True, 'Yes'),
+    ]
+    violation = models.BooleanField(choices=VIOLATION_CHOICES, default=False)
 
     def __str__(self):
-        return f"Car ID: {self.car_id}, License Plate: {self.license_plate}, Date Time: {self.date_time}, Location: {self.location}, Violation: {self.violation}"
+        return f"Car ID: {self.id}, License Plate: {self.license_plate}, Date Time: {self.date_time}, Location: {self.location}, Violation: {self.get_violation_display()}"
+
+
+
+
+
+
+
 
 
 
