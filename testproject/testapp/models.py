@@ -57,13 +57,3 @@ class Car(models.Model):
 
     def __str__(self):
         return f"Car ID: {self.id}, License Plate: {self.license_plate}, Date Time: {self.date_time}, Location: {self.location}, Violation: {self.get_violation_display()}"
-
-
-
-
-
-
-
-
-
-

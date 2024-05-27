@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
-from datetime import datetime
+from datetime import datetime, timedelta
 from .models import User, Video ,Car
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
@@ -9,8 +9,8 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
-from datetime import datetime, timedelta
-import json
+from django.core.exceptions import ValidationError
+import json, os
 
 def home(request):
     try:
@@ -43,12 +43,13 @@ def login_view(request):
     return render(request, 'login.html')
     
 def submit_video(request):
+    message = None
     if request.method == 'POST':
         form = VideoUploadForm(request.POST, request.FILES)
         if form.is_valid():
             video_file = form.cleaned_data['video_file']
-            if Video.objects.filter(video_file=video_file).exists():
-                messages.info(request, '該影片已存在。')
+            if video_exists(video_file.name):
+                message = "該影片已存在"
                 return HttpResponseRedirect(reverse('submit_video'))
             else:
                 video = Video(video_file=video_file)
@@ -61,14 +62,16 @@ def submit_video(request):
 
 def handle_uploaded_video(video_file):
     from django.conf import settings
-    import os
-    import uuid
-    filename = str(uuid.uuid4()) + '.mp4'
-    filepath = os.path.join(settings.MEDIA_ROOT, filename)
-    with open(filepath, 'wb+') as destination:
+    filepath = os.path.join(settings.MEDIA_ROOT, 'videos', video_file.name)  
+    with default_storage.open(filepath, 'wb+') as destination:
         for chunk in video_file.chunks():
             destination.write(chunk)
-    return settings.MEDIA_URL + filename
+    return settings.MEDIA_URL + 'videos/' + video_file.name
+
+def video_exists(filename):
+    from django.conf import settings
+    return default_storage.exists(os.path.join(settings.MEDIA_ROOT, 'videos', filename))
+
 
 def success_view(request):
     return render(request, 'success.html')
@@ -117,10 +120,3 @@ def search(request):
         if not search_results:
             message = "未查詢到符合的結果"
     return render(request, 'search.html', {'search_results': search_results, 'message': message})
-
-
-
-
-
-
-

@@ -24,6 +24,10 @@
             top: 10px;
             right: 10px;
         }
+        
+        .message {
+            text-align: center;
+        }
 
         form {
             width: 300px;
@@ -44,12 +48,6 @@
     <div class="upload-container">
         <a href="{% url 'home' %}" class="home-link"><button type="button">返回主頁</button></a>
         <h2>上傳影片</h2>
-        <div id="message-container">
-            {% if message %}
-                <p>{{ message }}</p>
-            {% endif %}
-        </div>
-
         {% if video_url %}
             <video controls autoplay>
                 <source src="{{ video_url }}" type="video/mp4">
@@ -60,6 +58,9 @@
             {% csrf_token %}
             <label for="id_video">搜尋影片:</label>
             <input type="file" id="id_video" name="video_file" ><br><br>
+            {% if message %}
+              <p class="message">{{ message }}</p>
+            {% endif %}
             <button type="submit">上傳</button>
         </form>
     </div>
