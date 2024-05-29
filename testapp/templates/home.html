@@ -10,6 +10,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            background-color: #EAEAEA;
         }
 
         h2 {
@@ -22,7 +23,9 @@
 
         .button-container button {
             margin: 0 10px;
+            background-color: #E2EEEE; 
         }
+        
     </style>
 </head>
 <body>
@@ -38,9 +41,9 @@
     <p>目前沒有可供播放的影片。</p>
     {% endif %}
     <div class="button-container">
-        <!--<a href="{% url 'login' %}"><button>使用者登入</button></a>-->
-        <a href="{% url 'upload_video' %}"><button>上傳影片</button></a>
-        <a href="{% url 'search' %}"><button>搜尋</button></a> 
+        <a href="{% url 'login' %}" class="button-link"><button>使用者登入</button></a>
+        <a href="{% url 'upload_video' %}" class="button-link"><button>上傳影片</button></a>
+        <a href="{% url 'search' %}" class="button-link"><button>查詢車輛</button></a> 
     </div>
 </body>
 </html>

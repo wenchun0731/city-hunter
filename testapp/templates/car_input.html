@@ -11,7 +11,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
+            background-color: #EAEAEA;
         }
 
         .container {
@@ -24,16 +24,17 @@
             position: relative; 
         }
 
-        .home-link {
+        .home-link [type="button"]{
             position: absolute; 
             top: 10px; 
             right: 10px; 
+            background-color: #C7E1E6; 
         }
 
         button[type="submit"] {
             width: 100%;
             padding: 10px;
-            background-color: #007bff;
+            background-color: #E2EEEE;
             color: #fff;
             border: none;
             border-radius: 4px;
@@ -41,7 +42,7 @@
         }
 
         button[type="submit"]:hover {
-            background-color: #0056b3;
+            background-color: #C7E1E6;
         }
 
         input,
@@ -58,7 +59,7 @@
 </head>
 <body>
     <div class="container">
-        <a href="{% url 'home' %}" class="home-link">返回主頁</a>
+        <a href="{% url 'home' %}" class="home-link"><button type="button">返回主頁</button></a>
         <h2>車輛資訊輸入</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -74,7 +75,7 @@
             <label for="violation">是否違規(打勾=是):</label>
             <input type="checkbox" id="violation" name="violation" value="true">
 
-            <button type="submit">Submit</button>
+            <button type="submit">輸入</button>
         </form>
     </div>
 </body>
