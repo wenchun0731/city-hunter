@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 from datetime import datetime, timedelta
 from .models import User, Video ,Car
 from django.shortcuts import render, redirect
@@ -8,9 +8,10 @@ from .forms import VideoUploadForm
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 from django.urls import reverse
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.exceptions import ValidationError
-import json, os
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.db.models import Q
+import cv2, pytesseract , json, os
+import numpy as np
 
 def home(request):
     try:
@@ -98,25 +99,43 @@ def car_input(request):
         return render(request, 'car_input.html')
     else:
         return render(request, 'car_input.html')
-    
+
 def search(request):
     message = None
-    search_results = []
+    search_results = Car.objects.all()
+    
     if request.method == 'GET':
         license_plate = request.GET.get('license_plate')
         date = request.GET.get('date')
         location = request.GET.get('location')
         
-        date_obj = datetime.strptime(date, '%Y-%m-%d') if date else None
-        
         if license_plate:
-            search_results.extend(Car.objects.filter(license_plate=license_plate))
-        if date_obj:
-            next_day = date_obj + timedelta(days=1)
-            search_results.extend(Car.objects.filter(date_time__gte=date_obj, date_time__lt=next_day))
+            search_results = search_results.filter(license_plate=license_plate)
+        if date:
+            search_results = search_results.filter(date_time__date=date)
         if location:
-            search_results.extend(Car.objects.filter(location=location))
+            search_results = search_results.filter(location=location)
             
-        if not search_results:
+        if not search_results.exists():
             message = "未查詢到符合的結果"
+            
     return render(request, 'search.html', {'search_results': search_results, 'message': message})
+
+
+
+def process_image(request):
+    if request.method == 'POST':
+        if 'image' in request.FILES:
+            image = request.FILES['image']
+            image_path = 'static/image.jpg'
+            with open(image_path, 'wb+') as destination:
+                for chunk in image.chunks():
+                    destination.write(chunk)
+            img = cv2.imread(image_path)
+            text = '辨識結果'
+            response_data = {'text': text}
+            return JsonResponse(response_data)
+        else:
+            return JsonResponse({'error': 'Image file is missing'}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)

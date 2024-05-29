@@ -11,6 +11,7 @@
             padding: 0;
             align-items: center;
             justify-content: center;
+            background-color: #EAEAEA;
         }
 
         .login-container {
@@ -29,15 +30,20 @@
 
         form {
             width: 300px;
-            margin: 0 auto; /* This will center the form horizontally */
+            margin: 0 auto; 
             margin-bottom: 20px;
-            text-align: center; /* This will center-align the elements inside the form */
+            text-align: center; 
         }
 
-        .home-link {
+        .home-link [type="button"]{
             position: absolute;
             top: 10px;
             right: 10px;
+            background-color: #C7E1E6; 
+        }
+        
+        input[type="submit"] {
+          background-color: #E2EEEE; 
         }
     </style>
 </head>
@@ -47,10 +53,10 @@
         <h2>使用者登入</h2>
         <form action="/submit_login/" method="post">
             {% csrf_token %}
-            <label htmlFor="email">email:</label>
+            <label htmlFor="email">帳號:</label>
             <input type="text" id="email" name="email"  />
             <p></p>
-            <label htmlFor="password">password:</label>
+            <label htmlFor="password">密碼:</label>
             <input type="password" id="password" name="password"  />
             <p></p>
             <input type="submit" value="登入" />

@@ -11,6 +11,7 @@
             display: flex;
             justify-content: center;
             align-items: flex-start;
+            background-color: #EAEAEA;
         }
 
         .upload-container {
@@ -19,10 +20,11 @@
             align-items: center;
         }
 
-        .home-link {
+        .home-link [type="button"]{
             position: absolute;
             top: 10px;
             right: 10px;
+            background-color: #C7E1E6; 
         }
         
         .message {
@@ -32,15 +34,16 @@
         form {
             width: 300px;
             margin: 0 auto;
-            text-align: center; /* Center-align the elements inside the form */
+            text-align: center; 
         }
 
         input[type="file"] {
-            margin-bottom: 20px; /* Add some space between the file input and the button */
+            margin-bottom: 20px; 
         }
 
         button[type="submit"] {
-            display: inline-block; /* Ensure the button is displayed as a block */
+            display: inline-block;
+            background-color: #E2EEEE; 
         }
     </style>
 </head>
@@ -64,7 +67,6 @@
             <button type="submit">上傳</button>
         </form>
     </div>
-
     <script>
         var videoUrl = getParameterByName('video_url');
         if (videoUrl) {

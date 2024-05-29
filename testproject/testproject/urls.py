@@ -1,14 +1,13 @@
 from django.contrib import admin
 from django.urls import path
-from testapp.views import index, submit_login, login_view, submit_video, success_view, favicon_not_found, home, car_input, search
-
+from testapp.views import index, submit_login, login_view, submit_video, success_view, favicon_not_found, home, car_input, search, process_image
 from django.conf import settings
 from django.conf.urls.static import static
 from testapp import views
 
 urlpatterns = [
-    path('', views.home, name='home'),
     path('admin/', admin.site.urls),
+    path('', views.home, name='home'),
     path('submit_login/', submit_login, name='submit_login'),
     path('submit_video/', submit_video, name='submit_video'),
     path('login/', login_view, name='login'),
@@ -18,6 +17,7 @@ urlpatterns = [
     path('upload_video/', views.submit_video, name='upload_video'),
     path('car_input/', car_input, name='car_input'),
     path('search/', search, name='search'),
+    path('process_image/', process_image, name='process_image'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
