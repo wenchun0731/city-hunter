@@ -85,9 +85,9 @@ def search(request):
     
 def car_input(request):
     if request.method == 'POST':
-        license_plate = request.POST.get('license_plate')
+        license_plate = request.POST.get('license_plate').upper()
         date_time = request.POST.get('date_time')
-        location = request.POST.get('location')
+        location = request.POST.get('location').upper()
         violation = request.POST.get('violation') == 'true'
         car = Car.objects.create(
             license_plate=license_plate,
