@@ -7,7 +7,7 @@ import pytesseract
 
 # 照片路径
 # files = glob.glob('path/to/your/images/*.jpg')
-image=cv2.imread('IMG_7434.JPG')
+
 def photo_resize(img, target_width, target_height):
     re_img = cv2.resize(img, (target_width, target_height))
     return re_img
@@ -110,40 +110,11 @@ def tesseracttt(img_path):
         print('辨識失敗')
     else:
         clean_text = text.strip()
-        print('辨識結果:\n{}'.format(clean_text))
-        cv2.putText(img, clean_text, (110, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
-        plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-        plt.axis('off')
-        plt.show()
+        # print('辨識結果:\n{}'.format(clean_text))
+        # cv2.putText(img, clean_text, (110, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3)
+        # plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        # plt.axis('off')
+        # plt.show()
+        return clean_text
 
 
-# img = cv2.imread(file)
-img=image
-#尺寸調整
-img = photo_resize(img, 300, 136)
-#對比度與亮度
-adj_img = adjusted(img, -1.5, 15)
-#灰階
-gray_img = cv2.cvtColor(adj_img, cv2.COLOR_BGR2GRAY)
-#Sobel
-Sobelx = Sobel(gray_img)
-#高斯模糊
-blur_img = Gussian(Sobelx)
-#二值化
-binary = threshold(blur_img)
-#找出輪廓
-min_x, max_x = contours(binary)
-#裁切
-cropped_img = cropped(binary, min_x, 0, binary.shape[0], max_x)
-#侵蝕
-ero_img = erope(cropped_img)
-#膨脹
-dilate_img = dilate(ero_img)
-#最小矩形
-bottom_left, top_left, bottom_right, top_right = findcontour(dilate_img)
-#裁切
-adj_img = cropped(adj_img, min_x, 0, img.shape[0], max_x)
-#訪設變換
-affine(adj_img, bottom_left, top_left, bottom_right, top_right)
-#字元辨識
-tesseracttt('output.jpg')
