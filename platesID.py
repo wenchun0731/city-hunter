@@ -102,6 +102,18 @@ def affine(img, bottom_left, top_left, bottom_right, top_right):
         print('None')
         pass
 
+def bg(img):
+  image=cv2.imread(img)
+  height,width=image.shape[:2]
+  new_height=height+36
+  new_width=width+36
+  x_offset=18
+  y_offset=18
+  #創建一個白色背景圖像
+  background = np.ones((new_height, new_width, 3), dtype=np.uint8) * 255
+  background[y_offset:y_offset+height,x_offset:x_offset+width]=image
+  cv2.imwrite('output.jpg',background)
+
 def tesseracttt(img_path):
     config = r'-c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789. --oem 3 --psm 6'
     img = cv2.imread(img_path)

@@ -1,4 +1,4 @@
-from platesID import photo_resize,adjusted,Sobel,Gussian,threshold,contours,cropped,erope,dilate,findcontour,affine,tesseracttt
+from platesID import photo_resize,adjusted,Sobel,Gussian,bg,threshold,contours,cropped,erope,dilate,findcontour,affine,tesseracttt
 from connectDB import connect,creatdata,com
 import cv2
 
@@ -31,6 +31,8 @@ bottom_left, top_left, bottom_right, top_right = findcontour(dilate_img)
 adj_img = cropped(adj_img, min_x, 0, img.shape[0], max_x)
 #訪設變換
 affine(adj_img, bottom_left, top_left, bottom_right, top_right)
+#加背景
+bg('output.jpg')
 #字元辨識
 text=tesseracttt('output.jpg')
 print('Hello')
@@ -38,3 +40,4 @@ print('Hello')
 cnx,cursor=connect()
 creatdata(text,cursor)
 com(cnx)
+print(text)
