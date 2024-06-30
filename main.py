@@ -3,7 +3,7 @@ from connectDB import connect,creatdata,com
 import cv2
 
 
-image=cv2.imread('IMG_7434.JPG')
+image=cv2.imread('AUM0392.jpg')
 img=image
 #尺寸調整
 img = photo_resize(img, 320, 136)
