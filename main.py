@@ -6,7 +6,7 @@ import cv2
 image=cv2.imread('IMG_7434.JPG')
 img=image
 #尺寸調整
-img = photo_resize(img, 300, 136)
+img = photo_resize(img, 320, 136)
 #對比度與亮度
 adj_img = adjusted(img, -1.5, 15)
 #灰階

@@ -95,7 +95,7 @@ def affine(img, bottom_left, top_left, bottom_right, top_right):
     x, y = 0, min(top_right[1], bottom_right[1])
     h = abs(bottom_right[1] - top_right[1])
     output = output[y-5:y+h, x:x+w]
-    output = adjusted(output, -1.5, 15)
+    output = adjusted(output, -1.2, 13)
     if output is not None:
         cv2.imwrite('output.jpg', output)
     else:
