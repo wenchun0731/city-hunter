@@ -1,0 +1,7 @@
+!pip install roboflow
+
+from roboflow import Roboflow
+rf = Roboflow(api_key="b2dEbFft2r35WYNkzDD5")
+project = rf.workspace("test-lmhkl").project("alldata-hv8la")
+version = project.version(8)
+dataset = version.download("yolov8")
