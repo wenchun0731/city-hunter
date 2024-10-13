@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>詳細記錄</title>
+    <style>
+        .container {
+            display: flex;
+            align-items: flex-start; /* 垂直對齊 */
+            margin-top: 20px;
+        }
+
+        .video-container {
+            width: 70%;
+            margin-right: 20px; /* 增加右邊距離 */
+        }
+
+        .video-container video {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .image-container {
+            display: flex;
+            flex-direction: column; /* 垂直排列圖片 */
+        }
+
+        .image-container img {
+            width: 200px; /* 或您需要的大小 */
+            height: auto;
+            margin-bottom: 10px; /* 增加底部間距 */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    {% load custom_filters %}  <!-- 這一行用來加載自定義過濾器 -->
+    <h1>詳細記錄</h1>
+    <p>車牌: {{ record.license_plate }}</p>
+    <p>日期: {{ record.date_time|date:"Y-m-d H:i" }}</p>
+    <p>地點: {{ record.location|upper }}</p>  <!-- 將地點轉為大寫 -->
+    <p>違規種類: {{ record.violation }}</p>
+    <p>開始時間（秒）: {{ start_seconds }}</p>
+
+    <div class="container">
+        {% if latest_video_url %}
+        <div class="video-container">
+            <video id="videoPlayer" controls>
+                <source src="{{ latest_video_url }}" type="video/mp4">
+                您的瀏覽器不支持視頻標籤。
+            </video>
+        </div>
+        <div class="image-container">
+            {% if record.car_image %}
+                <img src="data:image/jpeg;base64,{{ record.car_image|b64encode }}" alt="車子圖片">
+            {% else %}
+                <p>沒有車子圖片可顯示。</p>
+            {% endif %}
+
+            {% if record.plate_image %}
+                <img src="data:image/jpeg;base64,{{ record.plate_image|b64encode }}" alt="車牌圖片">
+            {% else %}
+                <p>沒有車牌圖片可顯示。</p>
+            {% endif %}
+        </div>
+        {% else %}
+        <p>目前沒有可供播放的影片。</p>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var video = document.getElementById('videoPlayer');
+            var startSeconds = {{ start_seconds }};  
+            
+            video.addEventListener('loadedmetadata', function() {
+                if (video.duration >= startSeconds) {
+                    video.currentTime = startSeconds;  
+                } else {
+                    console.error("開始時間超過影片長度");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
