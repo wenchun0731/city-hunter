@@ -11,17 +11,7 @@ Original file is located at
 # drive.mount('/content/drive')
 
 import cv2
-from google.colab.patches import cv2_imshow
-import PIL
-import glob
-from PIL import Image
-import matplotlib.pyplot as plt
-from google.colab.patches import cv2_imshow
 import numpy as np
-!apt install tesseract-ocr
-!apt install libtesseract-dev
-!pip install pytesseract
-!pip install pillow
 import pytesseract
 
 class plates_OCR:
