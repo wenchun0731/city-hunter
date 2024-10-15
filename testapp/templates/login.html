@@ -6,61 +6,125 @@
     <title>使用者登入頁面</title>
     <style>
         body, html {
+            width: 100%;
             height: 100%;
             margin: 0;
             padding: 0;
+            background-color: #EAEAEA;
+            display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #EAEAEA;
+            overflow: hidden;
         }
 
         .login-container {
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
             align-items: center;
+            width: 100%;
             height: 100%;
-            padding-top: 20px;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            border-radius: 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
         }
 
-        h2 {
-            margin-bottom: 20px;
-        }
-
-        form {
-            width: 300px;
-            margin: 0 auto; 
-            margin-bottom: 20px;
-            text-align: center; 
-        }
-
-        .home-link [type="button"]{
+        .home-link {
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: #C7E1E6; 
         }
-        
+
+        .home-link button {
+            background-color: #C7E1E6; 
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .home-link button:hover {
+            background-color: #B0D0D6;
+        }
+
+        h1 {
+            margin: 20px 0;
+        }
+
+        .table-wrapper {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 50px;
+        }
+
+        form {
+            text-align: center;
+            width: 100%;
+            padding: 20px;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid #000000;
+            box-sizing: border-box;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
         input[type="submit"] {
-          background-color: #E2EEEE; 
+            width: 100px;
+            background-color: #E2EEEE; 
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #C7E1E6;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <a href="{% url 'home' %}" class="home-link"><button type="button">返回主頁</button></a>
-        <h2>使用者登入</h2>
-        <form action="/submit_login/" method="post">
-            {% csrf_token %}
-            <label htmlFor="email">帳號:</label>
-            <input type="text" id="email" name="email"  />
-            <p></p>
-            <label htmlFor="password">密碼:</label>
-            <input type="password" id="password" name="password"  />
-            <p></p>
-            <input type="submit" value="登入" />
-        </form>
+        <a href="{% url 'home' %}" class="home-link">
+            <button type="button">返回主頁</button>
+        </a>
+        <h1>使用者登入</h1>
+        <div class="table-wrapper">
+            <form action="/submit_login/" method="post">
+                {% csrf_token %}
+                <label for="email">帳號:</label>
+                <input type="text" id="email" name="email" />
+                <label for="password">密碼:</label>
+                <input type="password" id="password" name="password" />
+                <input type="submit" value="登入" />
+                {% if messages %}
+                  <div class="messages">
+                    {% for message in messages %}
+                      <div class="message {{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+            </form>
+        </div>
     </div>
 </body>
 </html>

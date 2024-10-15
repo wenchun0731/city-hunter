@@ -24,18 +24,26 @@
             position: relative; 
         }
 
-        .home-link [type="button"]{
+        .home-link button[type="button"] {
             position: absolute; 
             top: 10px; 
             right: 10px; 
             background-color: #C7E1E6; 
+            border: none; 
+            border-radius: 4px; 
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        .home-link button[type="button"]:hover {
+            background-color: #B0D3D7; 
         }
 
         button[type="submit"] {
             width: 100%;
             padding: 10px;
             background-color: #E2EEEE;
-            color: #fff;
+            color: #333;
             border: none;
             border-radius: 4px;
             cursor: pointer;
@@ -45,37 +53,77 @@
             background-color: #C7E1E6;
         }
 
+        button:focus {
+            outline: 2px solid #5B9BD5;
+            outline-offset: 2px;
+        }
+
         input,
-        label {
+        label,
+        select {
             display: block;
             margin-bottom: 10px;
+            width: 100%;
         }
 
         h2 {
             margin-top: 0;
             text-align: center;
         }
+
+        fieldset {
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        legend {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <a href="{% url 'home' %}" class="home-link"><button type="button">返回主頁</button></a>
+        <a href="{% url 'home' %}" class="home-link">
+            <button type="button">返回主頁</button>
+        </a>
         <h2>車輛資訊輸入</h2>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <label for="license_plate">車牌:</label>
-            <input type="text" id="license_plate" name="license_plate">
+            <fieldset>
+                <legend>車輛資訊</legend>
+                <div class="input-group">
+                    <label for="license_plate">車牌:</label>
+                    <input type="text" id="license_plate" name="license_plate" aria-label="車牌" required>
+                </div>
 
-            <label for="date_time">日期時間:</label>
-            <input type="datetime-local" id="date_time" name="date_time">
+                <div class="input-group">
+                    <label for="date_time">日期時間:</label>
+                    <input type="datetime-local" id="date_time" name="date_time" aria-label="日期時間" required>
+                </div>
 
-            <label for="location">地點:</label>
-            <input type="text" id="location" name="location">
+                <div class="input-group">
+                    <label for="location">地點:</label>
+                    <input type="text" id="location" name="location" aria-label="地點" required>
+                </div>
 
-            <label for="violation">是否違規(打勾=是):</label>
-            <input type="checkbox" id="violation" name="violation" value="true">
+                <div class="input-group">
+                    <label for="violation">違規種類:</label>
+                    <select id="violation" name="violation" aria-label="違規種類" required>
+                        <option value="" disabled selected>選擇違規種類</option>
+                        <option value="闖紅燈">闖紅燈</option>
+                        <option value="未禮讓行人">未禮讓行人</option>
+                    </select>
+                </div>
 
-            <button type="submit">輸入</button>
+                <button type="submit">輸入</button>
+            </fieldset>
         </form>
     </div>
 </body>

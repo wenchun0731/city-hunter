@@ -8,40 +8,57 @@
         body, html {
             height: 100%;
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            background-color: #EAEAEA;
-        }
-        
-        .video-container {
-          width: 70%; 
-          margin-bottom: 10px;
-        }
-
-        .video-container video {
-          width: 100%; 
+            background-color: #ffffff;
+            font-family: Arial, sans-serif;
         }
 
         .upload-container {
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            position: relative;
         }
 
-        .home-link [type="button"]{
+        .home-link {
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: #C7E1E6; 
         }
-        
-        .message {
-            text-align: center;
+
+        .home-link button {
+            background-color: #C7E1E6; 
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .home-link button:hover {
+            background-color: #B0D0D6;
+        }
+
+        .upload-container h2 {
+            margin-top: 60px;
+            margin-bottom: 20px;
+        }
+
+        .upload-container video {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
         }
 
         form {
-            width: 300px;
+            width: 100%;
+            max-width: 600px;
             margin: 0 auto;
             text-align: center; 
         }
@@ -50,54 +67,48 @@
             margin-bottom: 20px; 
         }
 
-        button[type="submit"] {
-            display: inline-block;
-            background-color: #E2EEEE; 
+        .button-common {
+            background-color: #E2EEEE;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .button-common:hover {
+            background-color: #C7E1E6;
+        }
+        
+        .message {
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div class="upload-container">
-        <a href="{% url 'home' %}" class="home-link"><button type="button">返回主頁</button></a>
+        <a href="{% url 'home' %}" class="home-link">
+            <button type="button" class="button-common">返回主頁</button>
+        </a>
         <h2>上傳影片</h2>
         {% if video_url %}
             <video controls autoplay>
                 <source src="{{ video_url }}" type="video/mp4">
-                Your browser does not support the video tag.
+                您的瀏覽器不支持視頻標籤。
             </video>
         {% endif %}
         <form action="/submit_video/" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <label for="id_video">搜尋影片:</label>
+            <label for="id_video">選擇影片:</label>
             <input type="file" id="id_video" name="video_file" ><br><br>
             {% if message %}
               <p class="message">{{ message }}</p>
             {% endif %}
-            <button type="submit">上傳</button>
+            <button type="submit" class="button-common">上傳</button>
         </form>
     </div>
-    <script>
-        var videoUrl = getParameterByName('video_url');
-        if (videoUrl) {
-            var video = document.createElement("video");
-            var source = document.createElement("source");
-            source.setAttribute("src", videoUrl);
-            video.appendChild(source);
-            video.setAttribute("controls", "true");
-            video.setAttribute("autoplay", "true");
-            document.querySelector(".upload-container").appendChild(video);
-        }
-
-        function getParameterByName(name, url) {
-            if (!url) url = window.location.href;
-            name = name.replace(/[\[\]]/g, "\\$&");
-            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, " "));
-        }
-    </script>
 </body>
 </html>
 

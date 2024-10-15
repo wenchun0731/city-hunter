@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>主要頁面</title>
+    <title>主頁</title>
     <style>
         body {
             display: flex;
@@ -11,49 +11,187 @@
             align-items: center;
             justify-content: center;
             background-color: #EAEAEA;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
-        h2 {
-            margin-bottom: 20px;
+        .top-bar {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-        
+
+        .top-bar .title {
+            font-size: 1.5em;
+            margin: 0;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .dropdown {
+            position: relative;
+            left: 10px;
+        }
+
+        .dropdown-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-button:hover {
+            background-color: #45a049;
+        }
+
+        .dropdown-button::after {
+            content: '▼';
+            font-size: 14px;
+            margin-left: 8px;
+            transition: transform 0.3s;
+        }
+
+        .dropdown-button.up::after {
+            content: '▲';
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            top: 100%;
+            left: 0;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+
         .video-container {
-          width: 70%; 
-          margin-bottom: 10px;
-        }
-
-        .video-container video {
-          width: 100%; 
-        }
-
-        .button-container {
+            width: 70%;
             margin-top: 20px;
         }
 
-        .button-container button {
-            margin: 0 10px;
-            background-color: #E2EEEE; 
+        .video-container video {
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
-        
+
+        .login-button, .logout-button {
+            background-color: #E2EEEE;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            position: relative;
+            left: -10px;
+        }
+
+        .login-button:hover, .logout-button:hover {
+            background-color: #C7E1E6;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .welcome-text {
+            margin-right: 30px;
+        }
     </style>
 </head>
 <body>
-    <h2>主頁</h2>
+    <div class="top-bar">
+        <div class="dropdown">
+            <button class="dropdown-button" onclick="toggleDropdown()">
+                選單
+            </button>
+            <div class="dropdown-content">
+                <a href="{% url 'search' %}">查詢車輛</a>
+                <!--  <a href="{% url 'upload_video' %}">上傳影片</a>  -->
+            </div>
+        </div>
+        <h1 class="title">AI科技執法-城市獵人</h1>
+        <div class="user-info">
+            {% if user.is_authenticated %}
+            <span class="welcome-text">歡迎, {{ user.email }} !</span>
+            <button class="logout-button" onclick="confirmLogout()">登出</button>
+            {% else %}
+            <span class="welcome-text">目前為訪客</span>
+            <a href="{% url 'login' %}">
+                <button class="login-button">登入</button>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
     {% if latest_video_url %}
     <div class="video-container">
         <video controls>
             <source src="{{ latest_video_url }}" type="video/mp4">
-            Your browser does not support the video tag.
+            您的瀏覽器不支持視頻標籤。
         </video>
     </div>
     {% else %}
     <p>目前沒有可供播放的影片。</p>
     {% endif %}
-    <div class="button-container">
-        <a href="{% url 'login' %}" class="button-link"><button>使用者登入</button></a>
-        <a href="{% url 'upload_video' %}" class="button-link"><button>上傳影片</button></a>
-        <a href="{% url 'search' %}" class="button-link"><button>查詢車輛</button></a> 
-    </div>
+
+    <script>
+        document.addEventListener('click', function(event) {
+            const dropdownContent = document.querySelector('.dropdown-content');
+            const dropdownButton = document.querySelector('.dropdown-button');
+            
+            if (!dropdownButton.contains(event.target) && !dropdownContent.contains(event.target)) {
+                dropdownContent.style.display = 'none';
+                dropdownButton.classList.remove('up');
+            }
+        });
+
+        function toggleDropdown() {
+            const dropdownContent = document.querySelector('.dropdown-content');
+            const dropdownButton = document.querySelector('.dropdown-button');
+            
+            if (dropdownContent.style.display === 'block') {
+                dropdownContent.style.display = 'none';
+                dropdownButton.classList.remove('up');
+            } else {
+                dropdownContent.style.display = 'block';
+                dropdownButton.classList.add('up');
+            }
+        }
+
+        function confirmLogout() {
+            if (confirm('您確定要登出嗎？')) {
+                window.location.href = '{% url "logout" %}';
+            }
+        }
+    </script>
 </body>
 </html>
 

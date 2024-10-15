@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,93 +7,336 @@
     <style>
         body {
             background-color: #EAEAEA;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
-        
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: 2px solid #000000;
+            position: relative;
+        }
+
+        .table-wrapper {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
         table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
         }
 
         th, td {
-          width: 25%; 
-          padding: 8px;
-          text-align: center;
-          border-bottom: 1px solid #ddd;
-          background-color: #FFFFFF; 
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            background-color: #FFFFFF;
         }
 
         th {
-          background-color: #f2f2f2;
+            position: sticky;
+            top: 0;
+            background-color: #f2f2f2;
         }
 
         .search-container {
             display: flex;
-            justify-content: space-around; 
+            flex-wrap: nowrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .search-container .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-container input[type="text"],
+        .search-container input[type="date"] {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #FFFFFF;
+        }
+
+        .search-container .clear-button {
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            font-size: 14px;
+            line-height: 0;
+        }
+
+        .search-container .clear-button:hover {
+            color: #333;
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            background-color: #E2EEEE;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .search-container button:hover {
+            background-color: #C7E1E6;
+        }
+
+        h1 {
+            text-align: center;
             margin-top: 20px;
         }
-        
-        .search-container input[type="text"] {
-            flex: 1; 
-            margin-right: 10px; 
-            max-width: 25%;
-            background-color: #FFFFFF; 
-        }
-        
-        h2 {
-            text-align: center; 
-        }
-        
-        .home-link [type="button"]{
+
+        .action-buttons {
             position: absolute;
             top: 10px;
             right: 10px;
-            background-color: #C7E1E6; 
         }
-        
+
+        .action-buttons button {
+            background-color: #C7E1E6;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #000;
+            font-size: 16px;
+        }
+
+        .action-buttons button:hover {
+            background-color: #B0D0D6;
+        }
+
         .message {
             text-align: center;
+            margin-top: 20px;
         }
-        
-        .search-container button {
-          background-color: #E2EEEE; 
+
+        .delete-button {
+            background-color: #F8D7DA;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            color: #721C24;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0;
         }
-        
-        input[type="date"] {
-          background-color: #FFFFFF; 
+
+        .delete-button:hover {
+            background-color: #F5C6CB;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .operation {
+            display: none;
+        }
+
+        .edit-mode .operation {
+            display: table-cell;
+        }
+
+        .save-button {
+            background-color: #D4EDDA;
+            color: #155724;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .save-button:hover {
+            background-color: #C3E6CB;
+        }
+
+        @media (max-width: 768px) {
+            .search-container {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .search-container input[type="text"],
+            .search-container input[type="date"],
+            .search-container button {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <a href="{% url 'home' %}" class="home-link"><button type="button">返回主頁</button></a>
-    <h2>查詢車輛</h2>
-    <div class="search-container">
-        <form action="" method="get">
-          <input type="text" name="license_plate" placeholder="車牌" value="{{ request.GET.license_plate }}">
-          <input type="date" name="date" placeholder="日期" value="{{ request.GET.date }}">
-          <input type="text" name="location" placeholder="地點" value="{{ request.GET.location }}">
-          <button type="submit">查詢</button>
-        </form>
+    <div class="container">
+        <div class="action-buttons">
+            <a href="{% url 'home' %}">
+                <button type="button">返回主頁</button>
+            </a>
+        </div>
+        <h1>查詢車輛</h1>
+        <div class="search-container">
+            <form action="" method="get" style="display: flex; flex-wrap: nowrap; gap: 10px; width: 100%;">
+                <div class="input-wrapper">
+                    <input type="text" name="license_plate" placeholder="輸入車牌號碼" value="{{ request.GET.license_plate }}">
+                    <button class="clear-button" type="button" onclick="clearInput(this)">×</button>
+                </div>
+                <div class="input-wrapper">
+                    <input type="date" name="date" placeholder="日期" value="{{ request.GET.date }}">
+                    <button class="clear-button" type="button" onclick="clearInput(this)">×</button>
+                </div>
+                <div class="input-wrapper">
+                    <input type="text" name="location" placeholder="輸入地點" value="{{ request.GET.location }}">
+                    <button class="clear-button" type="button" onclick="clearInput(this)">×</button>
+                </div>
+                <button type="submit">查詢</button>
+            </form>
+        </div>
+        {% if message %}
+        <p class="message">{{ message }}</p>
+        {% endif %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="operation">操作</th>
+                        <th>車牌</th>
+                        <th>日期時間</th>
+                        <th>地點</th>
+                        <th>違規種類</th>
+                        <th>違規影片</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in search_results %}
+                    <tr class="data-row" data-id="{{ result.id }}">
+                        <td class="operation">
+                            <button class="delete-button" onclick="deleteRecord({{ result.id }})">×</button>
+                        </td>
+                        <td class="editable">{{ result.license_plate }}</td>
+                        <td class="editable">{{ result.date_time|date:"Y-m-d H:i" }}</td>
+                        <td class="editable">{{ result.location }}</td>
+                        <td class="editable">{{ result.violation }}</td>
+                        <td><a href="/record/{{ result.id }}/" target="_blank">片段</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <button class="save-button hidden" onclick="saveChanges()">保存變更</button>
     </div>
-    {% if message %}
-    <p class="message">{{ message }}</p>
-    {% endif %}
-    <table>
-        <tr>
-            <th>車牌</th>
-            <th>日期時間</th>
-            <th>地點</th>
-            <th>違規</th>
-        </tr>
-        {% for result in search_results %}
-        <tr>
-            <td>{{ result.license_plate }}</td>
-            <td>{{ result.date_time }}</td>
-            <td>{{ result.location }}</td>
-            <td>{{ result.get_violation_display }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+
+    <script>
+        function clearInput(button) {
+            const input = button.previousElementSibling;
+            input.value = '';
+        }
+
+        function toggleEditMode() {
+            const editButton = document.querySelector('.edit-button');
+            const saveButton = document.querySelector('.save-button');
+            const rows = document.querySelectorAll('.data-row');
+            const table = document.querySelector('table');
+            const isEditing = editButton.textContent === '修改完成';
+            
+            editButton.textContent = isEditing ? '修改' : '修改完成';
+            saveButton.classList.toggle('hidden', isEditing);
+            
+            if (isEditing) {
+                table.classList.remove('edit-mode');
+                rows.forEach(row => {
+                    row.querySelectorAll('.editable').forEach(cell => {
+                        cell.contentEditable = 'false';
+                    });
+                });
+            } else {
+                table.classList.add('edit-mode');
+                rows.forEach(row => {
+                    row.querySelectorAll('.editable').forEach(cell => {
+                        cell.contentEditable = 'true';
+                    });
+                });
+            }
+        }
+
+        function saveChanges() {
+            const rows = document.querySelectorAll('.data-row');
+            const updatedData = Array.from(rows).map(row => {
+                const id = row.dataset.id;
+                const cells = row.querySelectorAll('.editable');
+                return {
+                    id,
+                    license_plate: cells[0].textContent,
+                    date_time: cells[1].textContent,
+                    location: cells[2].textContent,
+                    violation: cells[3].textContent
+                };
+            });
+
+            fetch('/update_records/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ updates: updatedData })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('更新成功');
+                    location.reload(); // Refresh the page to reflect changes
+                } else {
+                    alert('更新失敗');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('更新過程中發生錯誤');
+            });
+        }
+
+        function deleteRecord(id) {
+            if (confirm('確定要刪除這筆資料嗎？')) {
+                fetch(`/delete_record/${id}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload(); // Refresh the page to reflect changes
+                    } else {
+                        alert('刪除失敗');
+                    }
+                });
+            }
+        }
+    </script>
 </body>
 </html>
 
