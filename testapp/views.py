@@ -15,21 +15,23 @@ from django.views.decorators.http import require_POST
 from django.http import Http404
 from django.contrib.auth import logout
 from django.conf import settings
-import cv2, pytesseract, json, os
+import cv2, pytesseract, json, os, re
 import numpy as np
 
 def home(request):
-    try:
-        latest_video = Video.objects.latest('uploaded_at')
-        context = {
-            'latest_video_url': latest_video.video_file.url
-        }
-    except Video.DoesNotExist:
-        context = {
-            'latest_video_url': None
-        }
+    video_filenames = ['output1137-2.mp4', 'output1140-2.mp4', '001.mp4', '002.mp4', '005.mp4']
+    video_urls = []
+
+    for filename in video_filenames:
+        video_path = os.path.join(settings.MEDIA_URL, 'videos', filename)
+        video_urls.append(video_path)
+
+    context = {
+        'video_urls': video_urls  
+    }
     
     return render(request, 'home.html', context)
+
     
 def submit_login(request):
     if request.method == 'POST':
@@ -99,31 +101,44 @@ def car_input(request):
     else:
         return render(request, 'car_input.html')
 
+
+import re
+from django.db.models import Q
+
 def search(request):
     message = None
-    search_results = Car.objects.all()
-    
+
+    search_results = Car.objects.filter(
+        Q(license_plate__regex=r'^[A-Za-z0-9\n\x0c]{6,9}+$') | Q(license_plate='辨識失敗')
+    ).order_by('-id')
+
+    violation_types = ['闖紅燈', '未禮讓行人']
+    search_results = search_results.filter(violation__in=violation_types)
+
     if request.method == 'GET':
         license_plate = request.GET.get('license_plate')
         date = request.GET.get('date')
         location = request.GET.get('location')
         
         if license_plate:
-            search_results = search_results.filter(license_plate=license_plate)
+            search_results = search_results.filter(license_plate__icontains=license_plate)
+        
         if date:
             search_results = search_results.filter(date_time__date=date)
+        
         if location:
             search_results = search_results.filter(location=location)
-            
+        
         if not search_results.exists():
             message = "未查詢到符合的結果"
 
-    search_results = search_results.order_by('-id')
-    
     for result in search_results:
         result.location = result.location.upper()
     
     return render(request, 'search.html', {'search_results': search_results, 'message': message})
+
+
+
 
 
 
@@ -195,17 +210,24 @@ def record_detail(request, id):
     except Video.DoesNotExist:
         latest_video = None  
 
-    # 根据 record.id 设置视频 URL
     if record.id >= 1 and record.id <= 81:
-        video_url = f"{settings.MEDIA_URL}videos/output_video.mp4"  # 使用 MEDIA_URL
-    elif record.id > 81 and record.id <= 150:
-        video_url = f"{settings.MEDIA_URL}videos/output_video2.mp4"  # 使用 MEDIA_URL
+        video_url = f"{settings.MEDIA_URL}videos/output_video3.mp4"  
+    elif record.id > 81 and record.id <= 101:
+        video_url = f"{settings.MEDIA_URL}videos/output_video2.mp4"  
+    elif record.id > 101 and record.id <= 207:
+        video_url = f"{settings.MEDIA_URL}videos/output_video3.mp4" 
+    elif record.id > 207 and record.id <= 229:
+        video_url = f"{settings.MEDIA_URL}videos/output_video2.mp4" 
+    elif record.id > 229 and record.id <= 235:
+        video_url = f"{settings.MEDIA_URL}videos/output1137-2.mp4" 
+    elif record.id > 235 and record.id <= 245:
+        video_url = f"{settings.MEDIA_URL}videos/output1140-2.mp4" 
     else:
         video_url = None
 
     context = {
         'record': record,
-        'latest_video_url': video_url,  # 使用根据 record.id 选择的视频 URL
+        'latest_video_url': video_url,  
         'start_seconds': record.seconds if record.seconds else 0  
     }
 

@@ -58,10 +58,9 @@ class Car(models.Model):
     violation = models.CharField(max_length=16, blank=True, null=True, default='')  
     seconds = models.DecimalField(max_digits=5, decimal_places=2, default=Decimal('0.00'))
     car_image = models.ImageField(upload_to='car_images/', blank=True, null=True, verbose_name="車輛圖片")
-    plate_image = models.ImageField(upload_to='plate_images/', blank=True, null=True, verbose_name="車牌圖片")  # New field
+    plate_image = models.ImageField(upload_to='plate_images/', blank=True, null=True, verbose_name="車牌圖片")  
 
     def save(self, *args, **kwargs):
-        # 將地點轉換為大寫再儲存
         if self.location:
             self.location = self.location.upper()
         super().save(*args, **kwargs)

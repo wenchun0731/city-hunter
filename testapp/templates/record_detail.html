@@ -7,13 +7,13 @@
     <style>
         .container {
             display: flex;
-            align-items: flex-start; /* 垂直對齊 */
+            align-items: flex-start; 
             margin-top: 20px;
         }
 
         .video-container {
             width: 60%;
-            margin-right: 20px; /* 增加右邊距離 */
+            margin-right: 20px; 
         }
 
         .video-container video {
@@ -24,24 +24,24 @@
 
         .image-container {
             display: flex;
-            flex-direction: column; /* 垂直排列圖片 */
+            flex-direction: column; 
         }
 
         .image-container img {
-            width: 350px; /* 或您需要的大小 */
+            width: 350px; 
             height: auto;
-            margin-bottom: 10px; /* 增加底部間距 */
+            margin-bottom: 10px; 
             border: 1px solid #ccc;
             border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    {% load custom_filters %}  <!-- 這一行用來加載自定義過濾器 -->
+    {% load custom_filters %}  
     <h1>詳細記錄</h1>
     <p>車牌: {{ record.license_plate }}</p>
     <p>日期: {{ record.date_time|date:"Y-m-d H:i" }}</p>
-    <p>地點: {{ record.location|upper }}</p>  <!-- 將地點轉為大寫 -->
+    <p>地點: {{ record.location|upper }}</p>  
     <p>違規種類: {{ record.violation }}</p>
     <p>開始時間（秒）: {{ start_seconds }}</p>
 
