@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import pymysql
+import dj_database_url
 pymysql.install_as_MySQLdb()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,7 +20,8 @@ SECRET_KEY = 'django-insecure-#9(oe1gke!6#b*1-mvz0xxyj4u!7&@@wi&mu)*h0b%pq@*xo2%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
@@ -73,7 +75,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql', 
         'NAME': '113-law',                      
         'USER': '113403',                      
-        'PASSWORD': '@All3403@',               
+        'PASSWORD': '@All3403@',            
         'HOST': '140.131.114.242',                           
         'PORT': '3306',                           
     }
@@ -124,6 +126,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 FAVICON_PATH = 'path/to/your/favicon.ico'
 
 AUTH_USER_MODEL = 'testapp.User'
+
+
+
 
 DATA_UPLOAD_MAX_MEMORY_SIZE = 619430400  # 400 MB
 FILE_UPLOAD_MAX_MEMORY_SIZE = 619430400  # 400 MB
